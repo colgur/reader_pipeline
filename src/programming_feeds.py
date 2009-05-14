@@ -12,7 +12,7 @@ import sys
 # Class Declarations
 
 # Function Declarations
-def createdir(rootDir):
+def createdir(root_dir):
    '''
    Create directory name based on current time and root directory name
    '''
@@ -21,47 +21,52 @@ def createdir(rootDir):
    import errno
 
    # build the Save Directory name from the current time + root
-   utcSec = time.time()
-   utc = time.gmtime(utcSec)
-   dirName = time.strftime("%Y%m%d_%H%M", utc)
-   saveDir = rootDir + '/' + dirName
+   utcsec = time.time()
+   utc = time.gmtime(utcsec)
+   dir_name = time.strftime("%Y%m%d_%H%M", utc)
+   save_dir = root_dir + '/' + dir_name
 
    try:
-      os.makedirs(saveDir)
+      os.makedirs(save_dir)
    except OSError, e:
       if os.error.errno != errno.EEXIST:
          print "Failed to Create Save Dir: ", e
-         saveDir = None
+         save_dir = None
 
-   return(saveDir)
+   return(save_dir)
 
-def fetch(saveDir):
+def fetch(save_dir):
    ''' 
    Take down the various feeds and store them according to a set pattern,
-   usually for later processing
+   usually for post-processing
    '''
    import urllib
    import socket
 
-   saveFeedTuple = (['digg.xml', 'http://feeds.digg.com/digg/topic/programming/popular.rss'],\
+   SAVE_FEED_TUPLE = (['digg.xml', 'http://feeds.digg.com/digg/topic/programming/popular.rss'],\
                     ["reddit_prog.xml", "http://www.reddit.com/r/programming/.rss"],\
                     ["delicious.xml", "http://feeds.delicious.com/v2/rss/popular/programming?count=15"],\
                     ["reddit_cpp.xml", "http://www.reddit.com/r/cpp/.rss"],\
-                    ["ycombinator.xml", "http://news.ycombinator.com/rss"])
+                    ["ycombinator.xml", "http://news.ycombinator.com/rss"],\
+                    ["pipes.xml", "http://pipes.yahoo.com/pipes/pipe.run?_id=biazNR0X3hG3ldiaBBNMsA&_render=rss"])
 
    # take down the current feed
    socket.setdefaulttimeout(10)
 
    try:
-      for location in saveFeedTuple:
-         localFile = saveDir + '/' + location[0]
+      for location in SAVE_FEED_TUPLE:
+         localfile = save_dir + '/' + location[0]
          feedUrl = location[1]
-         (filename, headers) = urllib.urlretrieve(feedUrl, localFile)
-   except socket.timeout:
-      print "Timed out on url:", pipes_url
+         print 'Fetching: ', feedUrl
 
+         (filename, headers) = urllib.urlretrieve(feedUrl, localfile)
+   except socket.timeout:
+      print "Timed out on url:", feedUrl
 
 def main():
+   ''' 
+   Entry point for the stand-alone program
+   '''
    from optparse import OptionParser
 
    parser = OptionParser()
@@ -73,10 +78,10 @@ def main():
       parser.print_help()
       sys.exit()
 
-   rootDir = options.directory
-   saveDir = createdir(rootDir)
-   if saveDir != None:
-      fetch(saveDir)
+   root_dir = options.directory
+   save_dir = createdir(root_dir)
+   if save_dir != None:
+      fetch(save_dir)
 
 # "main" body
 if __name__ == '__main__':

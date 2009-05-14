@@ -1,32 +1,52 @@
 #!/usr/bin/env python
 
 '''
-Created on Apr 12, 2009
-
-@author: crc
+Module Documentation
 '''
+
+# Imports
 import sys
-import urllib
-import socket
 
-from optparse import OptionParser
+# Global Variables
 
-parser = OptionParser()
-parser.add_option("-f", "--file", dest="filename", 
-                  help="Write Pipe Output to FILE", metavar="FILE")
-(options, args) = parser.parse_args()
+# Class Declarations
 
-if options.filename == None:
-   parser.print_help()
-   sys.exit()
+# Function Declarations
 
-pipes_url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=biazNR0X3hG3ldiaBBNMsA&_render=rss'
-local_file = options.filename
+def fetch(localfile):
+   ''' 
+   Take down Yahoo Pipes feed and store for post-processing
+   '''
 
-socket.setdefaulttimeout(10)
+   import urllib
+   import socket
 
-try:
-   (filename, headers) = urllib.urlretrieve(pipes_url, local_file)
-except socket.timeout:
-   print "Timed out on url:", pipes_url
+   PIPESURL = 'http://pipes.yahoo.com/pipes/pipe.run?_id=biazNR0X3hG3ldiaBBNMsA&_render=rss'
 
+   socket.setdefaulttimeout(10)
+
+   try:
+      (filename, headers) = urllib.urlretrieve(PIPESURL, localfile)
+   except socket.timeout:
+      print "Timed out on url:", PIPESURL
+
+def main():
+   ''' 
+   Entry point for the stand-alone program
+   '''
+   from optparse import OptionParser
+
+   parser = OptionParser()
+   parser.add_option("-f", "--file", dest="filename", 
+                     help="Write Pipe Output to FILE", metavar="FILE")
+   (options, args) = parser.parse_args()
+
+   if options.filename == None:
+      parser.print_help()
+      sys.exit()
+
+   fetch(options.filename)
+
+# "main" body
+if __name__ == '__main__':
+   main()
