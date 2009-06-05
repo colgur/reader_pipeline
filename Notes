@@ -1,0 +1,28 @@
+Saturday, May 23 2009
+Should use Google Reader API so there is no need for local feed store
+
+Using NLTK to deliver the top words
+   top phrase might be interesting but interaction would be more productive
+   a tag cloud or heat map
+
+So it goes like this now:
+   1. Source Reader for certain feeds
+   2. Produce a cloud of terms
+   3. Click on term in cloud to view feed entries
+
+Monday, May 18 2009
+Going to take the oldest feed file and update it
+   Use a python list of objects corresponding to the most primitive RSS 2.0 feed:
+      [((channel:title)([(item:title, item:link)]))]
+   or hierarchally:
+      channel:title
+         item
+            title
+            link
+         item
+            title
+            link
+         ...
+
+Could be a little more general and use sets:
+   Oldest feed will be a subset of newer so we just pickle the union
