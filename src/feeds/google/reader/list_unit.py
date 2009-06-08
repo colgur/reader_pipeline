@@ -1,7 +1,7 @@
 '''
 Test Documentation
 '''
-from feeds.google.reader.listapi import Subscriptions
+from feeds.google.reader.list import Subscriptions
 import unittest
 
 class Test(unittest.TestCase):

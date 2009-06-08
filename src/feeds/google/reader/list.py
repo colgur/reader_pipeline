@@ -118,7 +118,7 @@ def request(api_id):
 
 def test():
    ''' Unit test this little world '''
-   import feeds.google.reader.listapi_unit
+   import feeds.google.reader.list_unit
 
 # "main" body
 if __name__ == '__main__':
