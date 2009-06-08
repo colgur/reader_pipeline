@@ -17,7 +17,6 @@ Have a flow like this:
    prog_reddit.reading_list() is rss: pass directly to feedparser.parse()
       might be handy to integrate feedparser:
          prog_reddit.parse()
-         
 
 Saturday, May 23 2009
 Should use Google Reader API so there is no need for local feed store
