@@ -11,20 +11,26 @@ Module Documentation
 # Class Declarations
 
 # Function Declarations
-def request(feed_id):
-   ''' Helper formats request'''
+def build_url(feed_id, count):
+   '''Helper formats request'''
    import urllib, time
-   from feeds.google.reader import access
 
    # TODO: customize number of unread 'n'
    ck = int(time.time())
-   parameters = urllib.urlencode({'n': '20', \
+   parameters = urllib.urlencode({'n': count, \
                                   'ck':ck, \
                                   'xt':'user/-/state/com.google/read'}, True)
 
    quoted_feed_id = urllib.quote(feed_id)
 
-   function = '%s%s?%s' % (access.URI_ATOM, quoted_feed_id, parameters)
+   request_url = '%s%s?%s' % (access.URI_ATOM, quoted_feed_id, parameters)
+   return request_url
+
+def request(feed_id, count=20):
+   ''' Helper formats request'''
+   from feeds.google.reader import access
+
+   function = build_url(feed_id, count)
    response = access.request(function)
 
    return response
@@ -44,7 +50,7 @@ def get_unread(subscriptions):
 
 def test():
    ''' Unit test this little world '''
-   import feeds.google.reader.atomapi_unit
+   pass
 
 # "main" body
 if __name__ == '__main__':

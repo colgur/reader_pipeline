@@ -1,3 +1,24 @@
+Friday, June 05 2009
+We'll get a feeds.google.reader.Feed(title)
+   e.g. prog_reddit = feeds.google.reader.Feed('Programming Reddit')
+
+feeds.google.reader.Feed attributes: title, identifier, unread_count
+
+Have a flow like this:
+   # basic init: no i/o
+   prog_reddit = feeds.google.reader.atom.feeds('username', 'password')
+   # pick-up: identifier, unread_count, and reading_list
+   prog_reddit[i].refresh
+   # might want to parameterize Feed.reading_list()
+   unread_count = prog_reddit[i].unread_count
+   # reading_list is raw rss
+   reading_list = prog_reddit[i].reading_list
+
+   prog_reddit.reading_list() is rss: pass directly to feedparser.parse()
+      might be handy to integrate feedparser:
+         prog_reddit.parse()
+         
+
 Saturday, May 23 2009
 Should use Google Reader API so there is no need for local feed store
 
