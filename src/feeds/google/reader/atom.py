@@ -5,12 +5,24 @@ Module Documentation
 '''
 
 # Imports
+from feeds.google.reader import access
 
 # Global Variables
 
 # Class Declarations
+class Feed:
+   '''Highest level of access'''
+
+   def __init__(self):
+      name = ''
+      link = ''
+      reading_list = ''
 
 # Function Declarations
+def feeds(username, password):
+   '''Highest level entry point'''
+   access.login(username, password)
+
 def build_url(feed_id, count):
    '''Helper formats request'''
    import urllib, time
