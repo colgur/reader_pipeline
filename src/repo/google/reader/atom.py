@@ -5,7 +5,15 @@ Module Documentation
 '''
 
 # Imports
-from feeds.google.reader import access
+import logging
+try:
+   import feedparser
+except ImportError:
+   logging.critical("feedparser module is missing")
+   pass
+
+import repo.google.reader.list
+from repo.google.reader import access
 
 # Global Variables
 
@@ -13,15 +21,36 @@ from feeds.google.reader import access
 class Feed:
    '''Highest level of access'''
 
-   def __init__(self):
-      name = ''
-      link = ''
-      reading_list = ''
+   def __init__(self, subscription):
+      self.sub = subscription
+      self.reading_list = ''
+
+   def refresh(self):
+      '''Pick-up Reading List based on Subscription data'''
+      feed_id = self.sub.id
+      unread_count = int(self.sub.count)
+      self.reading_list = repo.google.reader.atom.request(feed_id, unread_count)
+
+   def parse(self):
+      '''Invoke Feed Parser'''
+      parse_tree = feedparser.parse(self.reading_list)
+      return parse_tree
 
 # Function Declarations
 def feeds(username, password):
    '''Highest level entry point'''
    access.login(username, password)
+
+   subs = repo.google.reader.list.subscriptions()
+   unread = repo.google.reader.list.unread()
+   merged = repo.google.reader.list.merge(subs, unread)
+
+   userfeeds = []
+   for eachsub in merged:
+      feed = Feed(eachsub)
+      userfeeds.append(feed)
+
+   return userfeeds
 
 def build_url(feed_id, count):
    '''Helper formats request'''
@@ -40,7 +69,7 @@ def build_url(feed_id, count):
 
 def request(feed_id, count=20):
    ''' Helper formats request'''
-   from feeds.google.reader import access
+   from repo.google.reader import access
 
    function = build_url(feed_id, count)
    response = access.request(function)
@@ -49,7 +78,7 @@ def request(feed_id, count=20):
 
 def get_unread(subscriptions):
    ''' Access Reader to retrieve all unread items of subscriptions'''
-   from feeds.google.reader.listapi import Subscriptions
+   from repo.google.reader.listapi import Subscriptions
 
    feedid = []
    for sub in subscriptions:

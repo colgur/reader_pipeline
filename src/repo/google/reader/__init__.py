@@ -1,3 +1,3 @@
-import feeds.google.reader
+import repo.google.reader
 
 __all__ = ["access", "list", "atom"]

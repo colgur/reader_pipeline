@@ -73,15 +73,15 @@ class ExpatFsm:
    '''
    __ACQ_SIGNAL = 'start'
 
-   def __init__(self, tags, complete_cb):
+   def __init__(self, filter, complete_cb):
       '''Initialize with tag list and proc'''
       # Parameterize Expat
       self.__parser_init()
 
       # (tag:value) mapping returned via callback/proc
-      self._tagseq = tags
-      self._acquire = dict.fromkeys(tags)
-      self._current_tag = iter(tags)
+      self._filter = filter
+      self._acquire = dict.fromkeys(filter)
+      self._current_tag = iter(filter)
 
       self.__fsm_init()
       self.__callback = complete_cb
@@ -98,7 +98,7 @@ class ExpatFsm:
       '''Helper initialize FSM'''
       self._fsm = FSM()
 
-      tagiter = iter(self._tagseq)
+      tagiter = iter(self._filter)
       init_tag = current_tag = tagiter.next()
       while True:
          try:
@@ -152,7 +152,7 @@ class ExpatFsm:
          current_key = self._current_tag.next()
       except StopIteration:
          # Reset Current Tag
-         self._current_tag = iter(self._tagseq)
+         self._current_tag = iter(self._filter)
          current_key = self._current_tag.next()
          pass
 

@@ -1,3 +1,32 @@
+Sunday, June 21 2009
+Label "version_1"
+   Pretty interesting feature set now:
+      1. Expat integration
+      2. FeedParser integration
+      3. NLTK integration
+      4. Google Reader API integration
+   Pulling data from Reader Repository and sampling a pretty large (>2000) corpus of Feed Titles.
+   Should probably clean-up and profile the code a little
+
+Title Corpus alone is not interesting: NLTK analysis needs to be a little more sophisticated
+   Probably need to inform with a UI
+
+Performance isn't great
+   Thinking of moving to Google AppEngine.
+   Should profile the code a little: might just be network latency but algorithms might need tweaking
+
+Thinking of a push to GitHub
+   utils.fsm does some pretty cool Expat integration (IMHO).
+   Would like some feedback on that code, maybe some better ideas.
+
+Could probably use some database integration
+   No need to go out for the Feeds every time the Titles need to analyzed: another reason to use AppEngine
+
+Been thinking of some real-time Twitter feed analysis
+   Weight words according to time: if 'Iran' occurs in 10 different tweets within 15 minutes of each other then it becomes interesting for the analysis and starts a process of running deeper (further back in time)
+      I'm sure there is some analysis in there that would help me spot trends
+   Not restricted to Twitter. A similar analysis could be applied to any bookmarking feed.
+
 Monday, June 08 2009
 List API could be similar:
    subscriptions = feeds.google.reader.subscriptions

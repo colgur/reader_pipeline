@@ -7,7 +7,7 @@ NLTK pipeline based on Google Reader feed(s)
 # Imports
 import logging
 import sys, nltk, re, pprint
-from feeds.google.reader import *
+from repo.google.reader import *
 
 # Global Variables
 
@@ -47,37 +47,24 @@ def tokenize(feedset):
 
    return titletokens
 
-def create_feedset(subscriptions):
+def create_feedset(feed_seq):
    ''' Call on Google Reader with subscription request
    and create a set of (title, link) pairs: a Feed Set '''
-   try:
-      import feedparser
-   except ImportError:
-      logging.critical("Require feedparser module")
-      # TODO: Error path
-      return
-
    feedset = []
-   subs_rss = atomapi.get_unread(subscriptions)
+   for eachfeed in feed_seq:
+      eachfeed.refresh()
+      pipe_feed = eachfeed.parse()
 
-   pipe_feed = feedparser.parse(subs_rss)
-   for entry in pipe_feed.entries:
-      feedset.append((entry.title, entry.link))
+      for entry in pipe_feed.entries:
+         feedset.append((entry.title, entry.link))
 
    return feedset
 
 def main():
    ''' Program entry point '''
    # TODO: Parse login (feed title?) from options
-   feed_titles = ('Programming')
-
-   access.login('colgur@gmail.com', 'madU64pa')
-
-   response = listapi.request(listapi.SUBSCRIPTIONS)
-   subs = listapi.Subscriptions(response)
-   programming_sub = subs.get_feed(feed_titles[0])
-
-   feedset = create_feedset(programming_sub)
+   reader_feeds = atom.feeds('colgur@gmail.com', 'madU64pa')
+   feedset = create_feedset(reader_feeds)
 
    tokens = tokenize(feedset)
    fraction = contentfraction(tokens)
