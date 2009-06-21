@@ -25,7 +25,7 @@ Could probably use some database integration
 Been thinking of some real-time Twitter feed analysis
    Weight words according to time: if 'Iran' occurs in 10 different tweets within 15 minutes of each other then it becomes interesting for the analysis and starts a process of running deeper (further back in time)
       I'm sure there is some analysis in there that would help me spot trends
-   Not restricted to Twitter. A similar analysis could be applied to any bookmarking feed.
+   Not restricted to Twitter. A similar analysis could be applied to any bookmarking feed
 
 Monday, June 08 2009
 List API could be similar:
