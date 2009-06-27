@@ -40,9 +40,5 @@ class Test(unittest.TestCase):
 
       self.assertEqual(self._primaryout, self.VALID_TEST_OUTPUT)
 
-   def testCondition(self):
-      ''' Failed transition '''
-      
-
 suite = unittest.TestLoader().loadTestsFromTestCase(Test)
 unittest.TextTestRunner().run(suite)

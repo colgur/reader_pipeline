@@ -1,8 +1,25 @@
+Thursday, June 25 2009
+Could publish any time
+
+Just want to store (title (summary?), reader_id) locally where reader_id is used to view
+   Would love to keep it all in Reader but the title/summary is required to match the high frequency words
+
+Infrastructure is in place now but latency makes iteration difficult
+   Need a data structure that will support quick look-up of "title/summaries" contain the term(s)
+      This sounds like a matrix of some kind I need the particulars now
+
+Monday, June 22 2009
+Time to publish. Gating items:
+   Present word count of the top 50
+   Commenting
+   Logging
+   atom test cases
+
 Sunday, June 21 2009
 Label "version_1"
    Pretty interesting feature set now:
       1. Expat integration
-      2. FeedParser integration
+      2. FeedParse integration
       3. NLTK integration
       4. Google Reader API integration
    Pulling data from Reader Repository and sampling a pretty large (>2000) corpus of Feed Titles.

@@ -29,7 +29,12 @@ def topcontent(tokens):
    fdist = nltk.FreqDist(content)
    vocab = fdist.keys()
 
-   return vocab[:50]
+   printable_output = []
+   for each_sample in vocab[:50]:
+      output_str = '%s : %d' % (each_sample, fdist[each_sample])
+      printable_output.append(output_str)
+
+   return printable_output
 
 def contentfraction(tokens):
    ''' Sample function from NLTK section 2.4.1 '''
@@ -71,8 +76,9 @@ def main():
    mostfrequent = topcontent(tokens)
 
    print 'content fraction: ' + str(fraction)
-   print 'top ten: '
-   pprint.pprint(mostfrequent)
+   print 'top fifty: '
+   for each_term in mostfrequent:
+      print each_term
 
 # "main" body
 if __name__ == '__main__':
