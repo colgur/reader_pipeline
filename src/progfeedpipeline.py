@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-'''
-Module Documentation
+'''NLTK learning
 '''
 
 # Imports
