@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-'''
-NLTK pipeline based on Google Reader feed(s)
+'''NLTK pipeline based on Google Reader feed(s)
 '''
 
 # Imports
@@ -65,10 +64,32 @@ def create_feedset(feed_seq):
 
    return feedset
 
+def parse_credentials():
+   '''Parse login info from options
+   '''
+   import optparse
+
+   parser = optparse.OptionParser()
+   parser.add_option("-u", "--user", dest="username", 
+                     help="USER associated with Feed Set", metavar="USER")
+   parser.add_option("-p", "--password", dest="password", 
+                     help="PWD associated with Feed Set", metavar="PWD")
+   (options, args) = parser.parse_args()
+
+   if options.username == None or options.password == None:
+      parser.print_help()
+      raise ValueError
+
+   return (options.username, options.password)
+
 def main():
    ''' Program entry point '''
-   # TODO: Parse login (feed title?) from options
-   reader_feeds = atom.feeds('colgur@gmail.com', 'madU64pa')
+   try:
+      (username, password) = parse_credentials()
+   except ValueError:
+      sys.exit()
+
+   reader_feeds = atom.feeds(username, password)
    feedset = create_feedset(reader_feeds)
 
    tokens = tokenize(feedset)
