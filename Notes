@@ -1,3 +1,51 @@
+Wednesday, July 01 2009
+Need to think about how the UI should be laid out
+   Should incorporate Tag Cloud and all of the related articles
+
+Would like to order tagged entries according to PostRank
+   Haven't read about the API yet but suspect that the underlying link in say, a reddit post, would need to be used rather than the post itself
+
+Want to (1) avoid duplicating Reader data and (2) run frequency and rank analysis in the background
+   That will mean having to query Reader on-demand comparing return values with stored (feed_name, item_id)
+      This might suck the performance: parse is time consuming
+   Proposed Model:
+      owner = UserProperty()
+      feed_list = StringListProperty("feed_list", "")
+      item_list = StringListProperty("item_list", "")
+         Should be able to relate Items and Feeds, but this might not even be necessary
+            If reading-list state is used then Item Model could be:
+               owner = UserProperty()
+               title = StringProperty()
+               id = StringProperty()
+            and Frequency Model could be:
+               owner = UserProperty()
+               category = CategoryProperty()
+               word = StringProperty()
+               frequency = IntegerProperty()
+            This way a query can be done on (owner, category) then (owner, title)
+
+Probably going to need the continuation syntax for adequate performance:
+   # Pull in current infrastructure
+   from repo.google.reader import *
+
+   # Pull in user feed layout
+   reader_feeds = atom.feeds(username, password)
+
+   # Pull each feed in Model.feed_list
+   reader_feeds[0].refresh()
+
+   # Parse the return values
+   # (might need to parameterize refresh() and do this in a yield())
+   parsed_feed = reader_feeds[0].parse()
+
+   # Compare with each Item in Model.item_list
+   parsed_feed.entries[0].id
+   parsed_feed.entries[0].source.id # and this (although feed url is carried outside parsed_feed)
+   parsed_feed.feed.gr_continuation # use this in subsequent requests e.g. http://www.google.com/reader/atom/feed/http://xkcd.com/rss.xml?ck=1169900000&xt=user/-/state/com.google/read&c=CIu4qN33pJsC
+
+There is no escaping a bit of UI design
+   It would be nice to simply "lens" Reader but that is not going to cut it
+
 Thursday, June 25 2009
 Could publish any time
 
