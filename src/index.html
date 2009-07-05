@@ -1,23 +1,51 @@
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    <link type="text/css" rel="stylesheet" href="/termcloud/tc.css" />
   </head>
   <body>
-    {% for greeting in greetings %}
-      {% if greeting.author %}
-        <b>{{ greeting.author.nickname }}</b> wrote:
-      {% else %}
-       An anonymous person wrote:
-      {% endif %}
-      <blockquote>{{ greeting.content|escape }}</blockquote>
-    {% endfor %}
+    <div id="chart" style="width: 50%"><img src="http://visapi-gadgets.googlecode.com/svn/trunk/image/spinner.gif" /></div>
+    <script type="text/javascript" src="/termcloud/tc.js"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1");
+      google.setOnLoadCallback(initialize); // Set callback to run when API is loaded
 
-    <form action="/sign" method="post">
-      <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="submit" value="Sign Guestbook"></div>
-    </form>
+      function initialize() {
+        // Create and send the query.
+        // gadgetHelper = new google.visualization.GadgetHelper();
+        // var query = gadgetHelper.createQueryFromPrefs(prefs);
+        // query.send(handleQueryResponse); // Send the query with a callback
+        // function
+        drawChart();
+      }
+    </script>
 
-    <a href="{{ url }}">{{ url_linktext }}</a>
+    <script type="text/javascript">
+      var chart;
+      var data;
+      var options = {target: '_blank'};
 
+      function drawChart() {
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Label');
+        data.addColumn('number', 'Value');
+        data.addColumn('string', 'Link');
+        data.addRows(3);
+        data.setValue(0, 0, 'First Term');
+        data.setValue(0, 1, 10);
+        data.setValue(1, 0, 'Second');
+        data.setValue(1, 1, 30);
+        data.setValue(1, 2, 'http://www.google.com');
+        data.setValue(2, 0, 'Third');
+        data.setValue(2, 1, 20);
+        var chartDiv = document.getElementById('chart');
+        chart = new TermCloud(chartDiv);
+        redraw();
+      }
+
+      function redraw() {
+        chart.draw(data, options);
+      }
+    </script>
   </body>
 </html>
