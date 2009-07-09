@@ -28,7 +28,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.'''
 
 # Imports
-import urllib, xml.parsers.expat
+import urllib, xml.parsers.expat, re
 
 from repo.google.reader import access
 from utils.fsm import FSM
@@ -207,7 +207,10 @@ def unread(raw_xml=None):
    # Closure instantiates Subscription upon ExpatFsm event
    def append(tag_dict):
       anunread = Subscription(tag_dict)
-      unread.append(anunread)
+      # Only want 'feed/' id's for now
+      reading_list = re.match('^user/', anunread.id)
+      if reading_list == None:
+         unread.append(anunread)
 
    parser = AttributeFilter(filter, append)
    parser.parse(raw_xml)

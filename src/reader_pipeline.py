@@ -79,12 +79,15 @@ def create_feedset(feed_seq):
    and create a set of (title, link) pairs: a Feed Set '''
    feedset = []
    for eachfeed in feed_seq:
+      logging.info("Refreshing %d from '%s'...", eachfeed.unread_count(), eachfeed.id())
       eachfeed.refresh()
+      logging.info("Parsing...")
       pipe_feed = eachfeed.parse()
 
       for entry in pipe_feed.entries:
          feedset.append((entry.title, entry.link))
 
+   logging.info('Done!')
    return feedset
 
 def parse_credentials():
@@ -107,6 +110,7 @@ def parse_credentials():
 
 def main():
    ''' Program entry point '''
+   logging.getLogger().setLevel(logging.DEBUG)
    try:
       (username, password) = parse_credentials()
    except ValueError:
@@ -114,6 +118,8 @@ def main():
 
    reader_feeds = atom.feeds(username, password)
    feedset = create_feedset(reader_feeds)
+
+   logging.info('Analyzing Feed Titles')
 
    tokens = tokenize(feedset)
    fraction = contentfraction(tokens)

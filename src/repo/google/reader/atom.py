@@ -48,6 +48,14 @@ class Feed:
       self.sub = subscription
       self.reading_list = ''
 
+   def id(self):
+      '''Accessor: Feed ID'''
+      return self.sub.id
+
+   def unread_count(self):
+      '''Accessor: Unread Count'''
+      return int(self.sub.count)
+
    def refresh(self):
       '''Pick-up Reading List based on Subscription data'''
       feed_id = self.sub.id
