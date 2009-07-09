@@ -1,3 +1,7 @@
+Wednesday, July 08 2009
+Looks like AppEngine is not going to workout
+   Need to customize Python run-time with NLTK which cannot (does seem to be) zimport-able
+
 Thursday, July 02 2009
 Will eventually make use of FirePython (http://firepython.binaryage.com/)
    Hope to avoid a lot of webapp development right now: focus should be on NLTK
