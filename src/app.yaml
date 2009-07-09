@@ -10,5 +10,9 @@ handlers:
 - url: /termcloud
   static_dir: termcloud
 
+- url: /user/.*
+  script: /user/pipeline.py
+  login: required
+
 - url: /.*
   script: helloworld.py
