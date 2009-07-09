@@ -77,9 +77,15 @@ def tokenize(feedset):
 def create_feedset(feed_seq):
    ''' Call on Google Reader with subscription request
    and create a set of (title, link) pairs: a Feed Set '''
+   pat = re.compile('http://.*$')
    feedset = []
    for eachfeed in feed_seq:
-      logging.info("Refreshing %d from '%s'...", eachfeed.unread_count(), eachfeed.id())
+      feed_str = eachfeed.id()
+      result = pat.search(feed_str)
+      if result is not None:
+         logging.info("Refreshing %d from '%s'...", 
+                      eachfeed.unread_count(), 
+                      result.group())
       eachfeed.refresh()
       logging.info("Parsing...")
       pipe_feed = eachfeed.parse()
@@ -87,7 +93,6 @@ def create_feedset(feed_seq):
       for entry in pipe_feed.entries:
          feedset.append((entry.title, entry.link))
 
-   logging.info('Done!')
    return feedset
 
 def parse_credentials():
@@ -110,7 +115,10 @@ def parse_credentials():
 
 def main():
    ''' Program entry point '''
-   logging.getLogger().setLevel(logging.DEBUG)
+   logging.basicConfig(level=logging.DEBUG,
+                       format='%(asctime)s : %(message)s',
+                       datefmt='%H:%M:%S')
+
    try:
       (username, password) = parse_credentials()
    except ValueError:
@@ -124,6 +132,8 @@ def main():
    tokens = tokenize(feedset)
    fraction = contentfraction(tokens)
    mostfrequent = topcontent(tokens)
+
+   logging.info('Done!')
 
    print 'content fraction: ' + str(fraction)
    print 'top fifty: '

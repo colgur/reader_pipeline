@@ -209,7 +209,7 @@ def unread(raw_xml=None):
       anunread = Subscription(tag_dict)
       # Only want 'feed/' id's for now
       reading_list = re.match('^user/', anunread.id)
-      if reading_list == None:
+      if reading_list is None:
          unread.append(anunread)
 
    parser = AttributeFilter(filter, append)
