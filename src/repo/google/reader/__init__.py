@@ -1,3 +1,3 @@
 import repo.google.reader
 
-__all__ = ["access", "list", "atom"]
+__all__ = ["access", "list", "atom", "edit"]

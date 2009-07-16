@@ -1,3 +1,18 @@
+Wednesday, July 15 2009
+Need some refactoring in the nlp and reader packages
+   Should really be using JSON output from reader
+      Took a parser with Django ('python-simplejson') but there are others
+   Module variables limit the tool to one user so classes will be required in most modules with "global" state
+
+The plan now is to Label Reader Items with "top words" and redirect from a Term Cloud or Collocation entry to the Reader UI
+   Like the look of that UI and have no desire to duplicate the Reader back-end
+   Should be able to construct a data model based on a User Cookie
+
+Saturday, July 11 2009
+Going to re-locate some of the reader_pipeline functionality
+   Thought stopwords used in getcontent() would be updated but decided that will be up to Level 3 processing
+   topcontent() will return 'words' used directly by Level 3
+
 Wednesday, July 08 2009
 Looks like AppEngine is not going to workout
    Need to customize Python run-time with NLTK which cannot (does seem to be) zimport-able

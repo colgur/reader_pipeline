@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-'''NLTK pipeline based on Google Reader feed(s)
-'''
+'''NLTK pipeline based on Google Reader feed(s)'''
 
 __license__ = '''Copyright (c) 2009 Chad Colgur
 
@@ -29,51 +28,16 @@ OTHER DEALINGS IN THE SOFTWARE.'''
 # Imports
 import logging
 import sys, nltk, re, pprint
+
 from repo.google.reader import *
+from utils import nlp
+from utils.nlp import progwordpunct_tokenize
 
 # Global Variables
 
 # Class Declarations
 
 # Function Declarations
-def getcontent(tokens):
-   ''' Use NLTK to drive off stopwords '''
-   stopwords = nltk.corpus.stopwords.words('english')
-   content = [w for w in tokens if w.lower() not in unicode(stopwords)]
-   longcontent = [w for w in content if len(w) > 3]
-
-   return longcontent
-
-def topcontent(tokens):
-   ''' Use NLTK to discover the top ten most frequent terms '''
-   content = getcontent(tokens)
-
-   fdist = nltk.FreqDist(content)
-   vocab = fdist.keys()
-
-   printable_output = []
-   for each_sample in vocab[:50]:
-      output_str = '%s : %d' % (each_sample, fdist[each_sample])
-      printable_output.append(output_str)
-
-   return printable_output
-
-def contentfraction(tokens):
-   ''' Sample function from NLTK section 2.4.1 '''
-   from decimal import Decimal
-
-   content = getcontent(tokens)
-   return Decimal(len(content)) / Decimal(len(tokens))
-
-def tokenize(feedset):
-   ''' Use NLTK to tokenize titles from Feed Set '''
-   titletokens = []
-   for (title, link) in feedset:
-      tokens = nltk.word_tokenize(title)
-      titletokens.extend(tokens)
-
-   return titletokens
-
 def create_feedset(feed_seq):
    ''' Call on Google Reader with subscription request
    and create a set of (title, link) pairs: a Feed Set '''
@@ -91,9 +55,30 @@ def create_feedset(feed_seq):
       pipe_feed = eachfeed.parse()
 
       for entry in pipe_feed.entries:
-         feedset.append((entry.title, entry.link))
+         title = nltk.clean_html(entry.title)
+         # actually want 'id' here in order to Edit
+         feedset.append((title, entry.id))
 
    return feedset
+
+def tokenize(feedset):
+   ''' Use NLTK to tokenize titles from Feed Set '''
+   titletokens = []
+   for (title, id) in feedset:
+      tokens = progwordpunct_tokenize(title)
+      titletokens.extend(tokens)
+
+   return titletokens
+
+def words(feedset):
+    tokens = tokenize(feedset)
+    fraction = nlp.content_fraction(tokens)
+    mostfrequent = nlp.top_content(tokens)
+    logging.info('Done!')
+    print 'content fraction: ' + str(fraction)
+    print 'top fifty: '
+    for each_term in mostfrequent:
+        print each_term
 
 def parse_credentials():
    '''Parse login info from options
@@ -122,23 +107,14 @@ def main():
    try:
       (username, password) = parse_credentials()
    except ValueError:
-      sys.exit()
+       sys.exit()
 
    reader_feeds = atom.feeds(username, password)
    feedset = create_feedset(reader_feeds)
 
    logging.info('Analyzing Feed Titles')
 
-   tokens = tokenize(feedset)
-   fraction = contentfraction(tokens)
-   mostfrequent = topcontent(tokens)
-
-   logging.info('Done!')
-
-   print 'content fraction: ' + str(fraction)
-   print 'top fifty: '
-   for each_term in mostfrequent:
-      print each_term
+   words(feedset)
 
 # "main" body
 if __name__ == '__main__':

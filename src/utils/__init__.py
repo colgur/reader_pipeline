@@ -1,3 +1,3 @@
 import utils
 
-__all__ = ["fsm"]
+__all__ = ["fsm", "nlp"]
