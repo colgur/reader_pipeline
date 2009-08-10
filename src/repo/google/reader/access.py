@@ -37,6 +37,7 @@ URI_LOGIN = 'https://www.google.com/accounts/ClientLogin'
 URI_READER = 'http://www.google.com/reader/'
 URI_API = URI_READER + 'api/0/'
 URI_ATOM = URI_READER + 'atom/'
+URI_VIEW = URI_READER + 'view/'
 
 # Local Variables
 __header__ = {}
@@ -65,6 +66,7 @@ def login(login, password):
    global __login__
    __login__ = login
    auth_req_data = urllib.urlencode({'Email': login, 'Passwd': password})
+   # TODO: Catch HttpError here
    auth_req = urllib2.Request(URI_LOGIN, data=auth_req_data)
 
    auth_resp = urllib2.urlopen(auth_req)

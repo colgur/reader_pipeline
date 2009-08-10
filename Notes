@@ -1,3 +1,16 @@
+Sunday, August 09 2009
+visualizations.labelcloud.refresh needs to run in a particular environment:
+   env PYTHONPATH=~/builds/Apollo/src/:~/builds/ DJANGO_SETTINGS_MODULE=djangotutorial.settings ./refresh.py -u <username> -p <password>
+
+Sunday, July 26 2009
+Flow for the gadget
+   Log-in
+      Use credentials (in another thread) to log-in and refresh Tag Cloud
+   Show current Tag Cloud
+      If database is empty then show the spinner and wait for Refresh Thread to complete
+
+There should be a way to signal the client that the database has been refreshed
+
 Wednesday, July 15 2009
 Need some refactoring in the nlp and reader packages
    Should really be using JSON output from reader

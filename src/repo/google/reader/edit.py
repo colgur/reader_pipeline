@@ -50,6 +50,14 @@ def add_label(label, item):
 
    request(EDIT_TAG, params)
 
+def remove_label(label):
+   token = request(TOKEN)
+   params = dict(i = label,
+                 ac = 'disable-tag',
+                 T = token)
+
+   request(DISABLE_TAG, params)
+
 def request(api_id, data=None):
    ''' Helper formats request'''
    function = '%s%s' % (access.URI_API, api_id)

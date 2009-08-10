@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>TermCloud - Sample</title>
+<link rel="stylesheet" type="text/css" href="media/visapi-gadgets/termcloud/tc.css" />
+</head>
+<body>
+<div id="chart" style="width: 50%"><img src="media/visapi-gadgets/image/spinner.gif" /></div>
+<script type="text/javascript" src="media/visapi-gadgets/termcloud/tc.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("visualization", "1");
+google.setOnLoadCallback(initialize); // Set callback to run when API is loaded
+function initialize() {
+  // Create and send the query.
+  // gadgetHelper = new google.visualization.GadgetHelper();
+  // var query = gadgetHelper.createQueryFromPrefs(prefs);
+  // query.send(handleQueryResponse);  // Send the query with a callback function
+  drawChart();
+}
+
+</script>
+
+<script>
+var chart;
+var data;
+var options = {target: '_blank'};
+
+function drawChart() {
+  {% if feedterm_list %}
+  data = new google.visualization.DataTable();
+  data.addColumn('string', 'Label');
+  data.addColumn('number', 'Value');
+  data.addColumn('string', 'Link');
+  var rows = {{ feedterm_list_length }};
+  data.addRows(rows);
+  var term, view, frequency;
+  var row = 0;
+  {% for term in feedterm_list %}
+    term = '{{ term.label }}';
+    view = '{{ term.uri }}';
+    frequency = {{ term.frequency }};
+    data.setValue(row, 0, term);
+    data.setValue(row, 1, frequency);
+    data.setValue(row, 2, view);
+    row = row + 1;
+  {% endfor %}
+  {% endif %}
+  var chartDiv = document.getElementById('chart');
+  chart = new TermCloud(chartDiv);
+  //google.visualization.events.addListener(chart, 'select', handleSelect);
+  redraw();
+}
+
+function redraw() {
+  chart.draw(data, options);
+}
+
+</script>
+<div id="log"></div>
+</body>
+</html>
